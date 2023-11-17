@@ -1,0 +1,5 @@
+markdown: kramdown
+theme: jekyll-theme-minimal
+title: Solução de otimização de corte de bobinas de papel
+description: Projeto da parceria Klabin / Inteli
+show_downloads: true

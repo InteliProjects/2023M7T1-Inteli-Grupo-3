@@ -1,0 +1,41 @@
+version: 0.2
+
+phases: 
+  pre_build:
+    commands:
+      - aws ecr get-login-password --region <REGION-CODE> | docker login --username AWS --password-stdin <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com
+  build: 
+    commands: 
+      - cd ./src/backend/services/auth
+      - docker build -t auth .
+      - docker tag auth:latest <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/auth:latest
+      - cd ../../../../ 
+
+      - cd ./src/backend/services/lead
+      - docker build -t lead .
+      - docker tag lead:latest <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/lead:latest
+      - cd ../../../../ 
+
+      - cd ./src/backend/services/order
+      - docker build -t order .
+      - docker tag order:latest <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/order:latest
+      - cd ../../../../ 
+
+      - cd ./src/backend/services/payment
+      - docker build -t payment .
+      - docker tag payment:latest <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/payment:latest
+      - cd ../../../../ 
+
+      - cd ./src/backend/services/product
+      - docker build -t product .
+      - docker tag product:latest <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/product:latest
+      - cd ../../../../ 
+  post_build: 
+    commands: 
+      - docker push <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/auth:latest
+      - docker push <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/lead:latest
+      - docker push <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/order:latest
+      - docker push <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/payment:latest
+      - docker push <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/product:latest
+      
+      

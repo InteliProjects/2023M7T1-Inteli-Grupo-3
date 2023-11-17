@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product
+  template:
+    metadata:
+      labels:
+        app: product
+    spec:
+      containers:
+      - name: product
+        image: <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/product:latest  # Replace with your actual image name and tag
+        ports:
+        - containerPort: 3004
+        env:
+        - name: SECRET
+          value: "<JWT_SECRET_VALUE>"
+        - name: DATABASE_URL
+          value: "<RDS_LINK>"

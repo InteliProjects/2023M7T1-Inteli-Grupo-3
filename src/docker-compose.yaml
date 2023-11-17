@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 30s
+        timeout: 10s
+        retries: 5
+    networks:
+      - default
+    volumes:
+      - ./backend/services/queue/init/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf:ro
+      - ./backend/services/queue/init/definitions.json:/etc/rabbitmq/definitions.json:ro
+  web:
+    build: ./frontend/ton-store
+    ports:
+      - "3000:3000"
+  auth:
+    build: ./backend/services/auth
+    ports:
+      - "3001:3000"
+    networks:
+      - default
+  order:
+    build: ./backend/services/order
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3002:3000"
+    networks:
+      - default
+  payment:
+    build: ./backend/services/payment
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "3003:3000"
+    networks:
+      - default
+  product:
+    build: ./backend/services/product
+    ports:
+      - "3004:3000"
+    networks:
+      - default
+  
+
+networks:
+  default:
+    driver: bridge
+

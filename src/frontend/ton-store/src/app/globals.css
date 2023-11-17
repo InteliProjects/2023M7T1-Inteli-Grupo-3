@@ -1,0 +1,16 @@
+/* Global styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Remove input type password eye icon */
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear
+{
+    display: none;
+}
+
+/* Custom shadow */
+.custom-shadow {
+    filter: drop-shadow(0px 0px 70px rgba(0, 0, 0, 0.10));
+}

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq
+  template:
+    metadata:
+      labels:
+        app: rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        image: <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/queue:latest  # Replace with your actual image name and tag
+        ports:
+            - containerPort: 5672
+            - containerPort: 15672
+        env:
+        - name: SECRET
+          value: "<JWT_SECRET_VALUE>"
+        - name: DATABASE_URL
+          value: "<RDS_LINK>"
+        - name: RABBITMQ_DEFAULT_USER
+          value: guest
+        - name: RABBITMQ_DEFAULT_PASS
+          value: guest

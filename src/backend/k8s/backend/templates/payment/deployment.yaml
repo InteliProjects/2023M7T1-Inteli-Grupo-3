@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment
+  template:
+    metadata:
+      labels:
+        app: payment
+    spec:
+      containers:
+      - name: payment
+        image:  <ACCOUNT-ID>.dkr.ecr.<REGION-CODE>.amazonaws.com/product:latest # Replace with your actual image name and tag
+        ports:
+        - containerPort: 3003
+        env:
+        - name: SECRET
+          value: "<JWT_SECRET_VALUE>"
+        - name: DATABASE_URL
+          value: "<RDS_LINK>"
